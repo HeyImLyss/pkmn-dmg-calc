@@ -47,82 +47,21 @@ async function attackHandler(attackingType) {
   const spinner = createSpinner('Checking Type...').start();
   await sleep();
 
-  let atkTypeOutput = '';
-  
-  switch (attackingType) {
-    case 'Normal':
-      atkTypeOutput = 'Normal'
-      break;
-    case 'Grass':
-      atkTypeOutput = 'Grass'
-      break;
-    case 'Water':
-      atkTypeOutput = 'Water'
-      break;
-    case 'Fire':
-      atkTypeOutput = 'Fire'
-      break;
-    case 'Electric':
-      atkTypeOutput = 'Electric'
-      break;
-    case 'Flying':
-      atkTypeOutput = 'Flying'
-      break;
-    case 'Ground':
-      atkTypeOutput = 'Ground'
-      break;
-    case 'Rock':
-      atkTypeOutput = 'Rock'
-      break;
-    case 'Fighting':
-      atkTypeOutput = 'Fighting'
-      break;
-    case 'Ice':
-      atkTypeOutput = 'Ice'
-      break;
-    case 'Poison':
-      atkTypeOutput = 'Poison'
-      break;
-    case 'Bug':
-      atkTypeOutput = 'Bug'
-      break;
-    case 'Ghost':
-      atkTypeOutput = 'Ghost'
-      break;
-    case 'Psychic':
-      atkTypeOutput = 'Psychic'
-      break;
-    case 'Dragon':
-      atkTypeOutput = 'Dragon'
-      break;
-    case 'Dark':
-      atkTypeOutput = 'Dark'
-      break;
-    case 'Fairy':
-      atkTypeOutput = 'Fairy'
-      break;
-    case 'Steel':
-      atkTypeOutput = 'Steel'
-      break;
-    default:
-      console.log('Something went wrong...');
-  }
-
-  if (attackingType === atkTypeOutput) {
+  if (attackingType !== null) {
+    let atkTypeOutput = attackingType;
     spinner.success({ text: `Attacking Type is ${atkTypeOutput} Type!`});
     atkType = atkTypeOutput
   }
   else {
     console.log('Something went wrong while inputting attacking type');
   }
-
-  
-}
+};
 
 async function defendHandler(defendingType) {
   await sleep();
-}
+ }
 
+  
 async function askAttack() {
   const answer = await inquirer.prompt({
     name: 'attack_question',
@@ -176,9 +115,40 @@ async function askDefend1() {
       'Fairy',
       'Steel',
     ],
-  });   return defendHandler(answer.defend_question1);
+  });   
+  defType1 = answer.defend_question1;
+  
 }
 
+async function askDefend2() {
+  const answer = await inquirer.prompt({
+    name: 'defend_question2',
+    type: 'select',
+    message: 'What is the second defending type?',
+    choices: [
+      'None',
+      'Normal',
+      'Grass',
+      'Water',
+      'Fire',
+      'Electric',
+      'Flying',
+      'Ground',
+      'Rock',
+      'Fighting',
+      'Ice',
+      'Poison',
+      'Bug',
+      'Ghost',
+      'Psychic',
+      'Dragon',
+      'Dark',
+      'Fairy',
+      'Steel',
+    ],
+  });   defType2 = answer.defend_question2;
+}
 await begin();
 await askAttack();
 await askDefend1();
+await askDefend2();
