@@ -9,7 +9,7 @@ import figlet from 'figlet';
 import { createSpinner } from 'nanospinner';
 import { TYPE_CHART } from './types.js'
 
-const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
+const sleep = (ms = 1000) => new Promise((r) => setTimeout(r, ms));
 
 async function begin() {
   const colorMain = chalkAnimation.rainbow(
@@ -23,24 +23,35 @@ async function begin() {
       ${chalk.bgBlue('How to Use:')}
       This is a command line application that will help you
       understand Pokemon's system for damage calculation.
+
+      Please keep in mind that this calculator uses type logic
+      from Generation VI onwards - this means that Dark and Ghost
+      are no longer resisted by Steel, for example.
     `)
 }
 
 let atkType = '';
 let dfType1 = '';
 let dfType2 = '';
-
+let finalMult = 1.0;
 
 async function getEffectiveness(attackingType, defendingTypes) {
   const moveRelation = TYPE_CHART[attackingType.toUpperCase()];
+  const spinner = createSpinner('Checking Effectiveness...').start();
+  await sleep();
 
-  if (!moveRelation) return 1.0;
+  if (!moveRelation) {
+    spinner.error({ text: 'Unknown attack type' });
+    return 1.0;
+  }
 
-  return defendingTypes.reduce((totalMultiplier, defType) => {
+  const finalMult = defendingTypes.reduce((total, defType) => {
     const match = moveRelation[defType.toUpperCase()];
-    const currentMultiplier = match !== undefined ? match : 1.0;
-    return totalMultiplier * currentMultiplier;
+    return total * (match !== undefined ? match : 1.0);
   }, 1.0);
+
+  spinner.success({ text: `Your move will be ${finalMult}x effective!` });
+  return finalMult;
 }
 
 async function attackHandler(attackingType) {
@@ -152,3 +163,4 @@ await begin();
 await askAttack();
 await askDefend1();
 await askDefend2();
+await getEffectiveness(atkType, [dfType1, dfType2]);
