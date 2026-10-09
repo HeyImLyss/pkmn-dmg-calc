@@ -116,7 +116,7 @@ async function askDefend1() {
       'Steel',
     ],
   });   
-  defType1 = answer.defend_question1;
+  dfType1 = answer.defend_question1;
   
 }
 
@@ -146,7 +146,7 @@ async function askDefend2() {
       'Fairy',
       'Steel',
     ],
-  });   defType2 = answer.defend_question2;
+  });   dfType2 = answer.defend_question2;
 }
 await begin();
 await askAttack();
